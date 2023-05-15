@@ -3,8 +3,8 @@ const mongoose = require('mongoose');
 const PokemonCardSchema = new mongoose.Schema({
   id: {
     type: String,
-    required: true,
-    unique: true
+    unique: true, 
+    required: true
   },
   name: {
     type: String,
@@ -14,7 +14,6 @@ const PokemonCardSchema = new mongoose.Schema({
   slug: {
     type: String,
     required: true,
-    unique: true,
     lowercase: true,
   },
   supertype: {

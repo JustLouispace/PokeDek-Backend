@@ -1,10 +1,9 @@
 {
-    "cSpell.words": [
-        "firstname",
-        "genarate",
-        "lastname",
-        "middlewares",
-        "refreshtoken",
-        "updateuser"
-    ]
+  "cSpell.words": [
+    "firstname",
+    "Flitering",
+    "lastname",
+    "middlewares",
+    "resettoken"
+  ]
 }
