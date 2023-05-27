@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
 const PokemonCardRouter = require("./routes/PokemonCardRoute")
+const BlogRouter = require("./routes/BlogRoute")
 const bodyParser = require('body-parser');
 const { notFound, errorHandler } = require('./middlewares/middleware');
 const cookieParser = require("cookie-parser");
@@ -18,6 +19,7 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(cookieParser());
 app.use('/api/user', authRouter);
 app.use('/api/PokemonCard', PokemonCardRouter);
+app.use('/api/Blog', BlogRouter);
 
 
 

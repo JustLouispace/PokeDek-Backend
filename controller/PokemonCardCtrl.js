@@ -3,6 +3,7 @@ const PokemonCard = require('../model/PokemonCardModel');
 const slugify = require("slugify");
 const { query } = require("express");
 
+
 const createPokemonCard = asyncHandler(async(req, res) => {
     try{
         if(req.body.name){
@@ -63,6 +64,7 @@ const getPokemonCard = asyncHandler(async(req, res) => {
 
 const getallPokemonCard = asyncHandler(async(req, res) => {
     // Flitering
+    //http://localhost:5000/api/PokemonCard?types=Lightning
     try{
         const queryObj = { ...req.query };
         const excludeFields = ["page", "sort", "limit", "fields"];
