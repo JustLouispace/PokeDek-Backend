@@ -26,12 +26,6 @@ var blogSchema = new mongoose.Schema(
       images: [""],
     },
     {
-      toJSON: {
-        virtuals: true,
-      },
-      toObject: {
-        virtuals: true,
-      },
       timestamps: true,
     }
   );

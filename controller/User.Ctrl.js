@@ -14,6 +14,7 @@ const crypto = require("crypto");
 //create email if no email in db
 const createUser = asyncHandler(async(req, res) => {
     const email = req.body.email;
+    console.log(req.body);
     const findUser = await User.findOne({email:email});
     if(!findUser) {
         const newUser = await User.create(req.body);
