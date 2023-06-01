@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const crypto = require('crypto');
 
 // Declare the Schema of the Mongo model
-var userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     Name: {
         type: String,
         required: false,
@@ -30,7 +30,7 @@ var userSchema = new mongoose.Schema({
         default: [],
     },
     address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
-    Favorite: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
+    MyCollection: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     refreshToken: {
         type: String,
     },
@@ -69,5 +69,5 @@ userSchema.methods.createPasswordResetToken = async function () {
 
 
 //Export the model
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model("User", userSchema);
 
