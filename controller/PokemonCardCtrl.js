@@ -117,6 +117,7 @@ const getallPokemonCard = asyncHandler(async (req, res) => {
 const addToMyCollection = asyncHandler(async (req, res) => {
   const { _id } = req.user;
   const { prodId } = req.body;
+  console.log(_id, prodId);
   try {
     const user = await User.findById(_id);
     const alreadyadded = user.MyCollection.find((id) => id.toString() === prodId);
