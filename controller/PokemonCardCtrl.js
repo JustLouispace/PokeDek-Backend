@@ -3,6 +3,12 @@ const PokemonCard = require('../model/PokemonCardModel');
 const slugify = require("slugify");
 const { query } = require("express");
 const User = require('../model/userModel');
+const validateMongodbID = require("../utils/validateMongodbId");
+const { default: mongoose } = require("mongoose");
+const fs = require('fs');
+const { cloudinaryUploadImg } = require("../utils/cloudinary");
+
+
 
 const createPokemonCard = asyncHandler(async (req, res) => {
   try {
@@ -149,4 +155,44 @@ const addToMyCollection = asyncHandler(async (req, res) => {
   }
 });
 
-module.exports = { createPokemonCard, getPokemonCard, getallPokemonCard, updatePokemonCard, deletePokemonCard, addToMyCollection }
+const uploadImages = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  validateMongodbID(id);
+  try {
+    const uploader = (path) => cloudinaryUploadImg(path, "images");
+    const urls = [];
+    const files = req.files;
+    for (const file of files) {
+      const { path } = file;
+      const newpath = await uploader(path);
+      urls.push(newpath);
+      fs.unlinkSync(path);
+      
+    }
+    const findProduct = await PokemonCard.findByIdAndUpdate(
+      id,
+      {
+        images: urls.map(file => {
+          return file
+        })
+      },
+      {
+        new: true,
+      }
+    );
+    res.json(findProduct)
+  }
+  catch (error) {
+    throw new Error(error)
+  }
+})
+
+module.exports = {
+  createPokemonCard,
+  getPokemonCard,
+  getallPokemonCard,
+  updatePokemonCard,
+  deletePokemonCard,
+  addToMyCollection,
+  uploadImages
+}
