@@ -29,6 +29,10 @@ const userSchema = new mongoose.Schema({
         type: Array,
         default: [],
     },
+    images: [{
+        public_id : String,
+        url : String
+      }],
     address: [{ type: mongoose.Schema.Types.ObjectId, ref: "Address" }],
     MyCollection: [{ type: mongoose.Schema.Types.ObjectId, ref: "Product" }],
     refreshToken: {

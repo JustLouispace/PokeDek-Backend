@@ -6,6 +6,7 @@ const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
 const PokemonCardRouter = require("./routes/PokemonCardRoute")
 const BlogRouter = require("./routes/BlogRoute")
+const uploadRouter = require("./routes/uploadRoute")
 const bodyParser = require('body-parser');
 const { notFound, errorHandler } = require('./middlewares/middleware');
 const cookieParser = require("cookie-parser");
@@ -25,6 +26,7 @@ app.use(cors());
 app.use('/api/user', authRouter);
 app.use('/api/PokemonCard', PokemonCardRouter);
 app.use('/api/Blog', BlogRouter);
+app.use('/api/upload', uploadRouter);
 
 app.use(notFound);
 app.use(errorHandler);

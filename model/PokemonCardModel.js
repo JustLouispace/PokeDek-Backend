@@ -1,14 +1,9 @@
 const mongoose = require('mongoose');
 
 const PokemonCardSchema = new mongoose.Schema({
-  id: {
-    type: String,
-    unique: true,
-    required: true
-  },
   name: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   slug: {
@@ -18,24 +13,27 @@ const PokemonCardSchema = new mongoose.Schema({
   },
   supertype: {
     type: String,
-    required: true
+    required: false
   },
   subtypes: {
     type: String,
-    required: true
+    required: false
   },
   hp: {
     type: String,
-    required: true
+    required: false
   },
   types: {
     type: String,
-    required: true
+    required: false
   },
   evolvesFrom: {
     type: String,
   },
-  images: [],
+  images: [{
+    public_id : String,
+    url : String
+  }],
 });
 
 module.exports = mongoose.model('PokemonCard', PokemonCardSchema);
