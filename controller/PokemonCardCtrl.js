@@ -118,6 +118,8 @@ const getallPokemonCard = asyncHandler(async (req, res) => {
 });
 
 const addToMyCollection = asyncHandler(async (req, res) => {
+  console.log(req);
+  console.log(res);
   const { _id } = req.user;
   const { prodId } = req.body;
   console.log(_id, prodId);
