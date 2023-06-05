@@ -66,56 +66,51 @@ const getPokemonCard = asyncHandler(async (req, res) => {
 });
 
 const getallPokemonCard = asyncHandler(async (req, res) => {
-  // Flitering
-  //http://localhost:5000/api/PokemonCard?types=Lightning
   try {
     const queryObj = { ...req.query };
     const excludeFields = ["page", "sort", "limit", "fields"];
     excludeFields.forEach((el) => delete queryObj[el]);
-    console.log(queryObj);
+
+    // Filtering
     let queryStr = JSON.stringify(queryObj);
     queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    const query = PokemonCard.find(JSON.parse(queryStr));
 
-    let query = PokemonCard.find(JSON.parse(queryStr));
-
-    //sorting
-    //http://localhost:5000/api/PokemonCard?sort=types,hp
+    // Sorting
     if (req.query.sort) {
       const sortBy = req.query.sort.split(',').join(' ');
-      query = query.sort(sortBy);
+      query.sort(sortBy);
     } else {
-      query = query.sort('createdAt');
+      query.sort('createdAt');
     }
 
     // Limiting the fields
-    // http://localhost:5000/api/PokemonCard?fields=name,supertype,subtypes,hp,types,evolvesFrom
     if (req.query.fields) {
       const fields = req.query.fields.split(',').join(' ');
-      query = query.select(fields);
+      query.select(fields);
     } else {
-      query = query.select("-__v")
+      query.select("-__v");
     }
 
-    //pagination
-    //http://localhost:5000/api/PokemonCard?page=2&limit=3
+    // Pagination
     const page = req.query.page;
     const limit = req.query.limit;
     const skip = (page - 1) * limit;
-    query = query.skip(skip).limit(limit);
+    query.skip(skip).limit(limit);
     if (req.query.page) {
       const pokemonCardCount = await PokemonCard.countDocuments();
-      if (skip >= pokemonCardCount) throw new Error("This Page does not exists");
+      if (skip >= pokemonCardCount) {
+        throw new Error("This Page does not exist");
+      }
     }
-    console.log(page, limit, skip);
 
     const pokemonCards = await query;
     res.json(pokemonCards);
-
-
   } catch (error) {
     throw new Error(error);
   }
 });
+
 
 const addToMyCollection = asyncHandler(async (req, res) => {
   console.log(req);

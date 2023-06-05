@@ -5,6 +5,7 @@ const dotenv = require('dotenv').config();
 const PORT = process.env.PORT || 4000;
 const authRouter = require("./routes/authRoute");
 const PokemonCardRouter = require("./routes/PokemonCardRoute")
+const RequestRoute = require("./routes/RequestRoute")
 const BlogRouter = require("./routes/BlogRoute")
 const uploadRouter = require("./routes/uploadRoute")
 const bodyParser = require('body-parser');
@@ -25,6 +26,7 @@ app.use(cors());
 
 app.use('/api/user', authRouter);
 app.use('/api/PokemonCard', PokemonCardRouter);
+app.use('/api/Request', RequestRoute);
 app.use('/api/Blog', BlogRouter);
 app.use('/api/upload', uploadRouter);
 
