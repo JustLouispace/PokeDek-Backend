@@ -71,43 +71,54 @@ const getallPokemonCard = asyncHandler(async (req, res) => {
     const excludeFields = ["page", "sort", "limit", "fields"];
     excludeFields.forEach((el) => delete queryObj[el]);
 
+    // Handle array parameters
+    if (req.query.supertype) {
+      queryObj.supertype = { $in: req.query.supertype.split(",") };
+    }
+    if (req.query.subtypes) {
+      queryObj.subtypes = { $in: req.query.subtypes.split(",") };
+    }
+
+
     // Filtering
-    let queryStr = JSON.stringify(queryObj);
-    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
-    const query = PokemonCard.find(JSON.parse(queryStr));
+    const query = PokemonCard.find(queryObj);
 
     // Sorting
     if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
+      const sortBy = req.query.sort.split(",").join(" ");
       query.sort(sortBy);
     } else {
-      query.sort('createdAt');
+      query.sort("createdAt");
     }
 
     // Limiting the fields
     if (req.query.fields) {
-      const fields = req.query.fields.split(',').join(' ');
+      const fields = req.query.fields.split(",").join(" ");
       query.select(fields);
     } else {
       query.select("-__v");
     }
 
     // Pagination
-    const page = req.query.page;
-    const limit = req.query.limit;
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 0;
     const skip = (page - 1) * limit;
     query.skip(skip).limit(limit);
-    if (req.query.page) {
-      const pokemonCardCount = await PokemonCard.countDocuments();
-      if (skip >= pokemonCardCount) {
-        throw new Error("This Page does not exist");
-      }
-    }
 
+    // Execute the query
     const pokemonCards = await query;
-    res.json(pokemonCards);
+
+    // Get total count for pagination
+    const totalPokemonCardsCount = await PokemonCard.countDocuments(queryObj);
+
+    res.json({
+      data: pokemonCards,
+      total: totalPokemonCardsCount,
+      page,
+      limit,
+    });
   } catch (error) {
-    throw new Error(error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
