@@ -79,6 +79,11 @@ const getallPokemonCard = asyncHandler(async (req, res) => {
       queryObj.subtypes = { $in: req.query.subtypes.split(",") };
     }
 
+    // Searching by name
+    if (req.query.name) {
+      queryObj.name = { $regex: '^' + req.query.name, $options: 'i' }; // add this line
+    }
+
 
     // Filtering
     const query = PokemonCard.find(queryObj);
