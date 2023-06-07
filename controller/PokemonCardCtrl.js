@@ -27,9 +27,7 @@ const createPokemonCard = asyncHandler(async (req, res) => {
 const updatePokemonCard = asyncHandler(async (req, res) => {
   const id = req.params.id;
   try {
-    if (req.body.name) {
-      req.body.slug = slugify(req.body.name);
-    }
+
     const updatedPokemonCard = await PokemonCard.findByIdAndUpdate(
       id,
       req.body,

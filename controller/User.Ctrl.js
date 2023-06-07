@@ -180,17 +180,17 @@ const deleteUser = asyncHandler(async (req, res) => {
 
 //update user
 const updateUser = asyncHandler(async (req, res) => {
-  console.log();
-  const { id } = req.user;
+  const { id } = req.body;
+  console.log(req.body);
   validateMongodbID(id);
   try {
     const updateUser = await User.findByIdAndUpdate(
       id,
       {
-        firstname: req?.body?.firstname,
-        lastname: req?.body?.lastname,
+        name: req?.body?.name,  
         email: req?.body?.email,
         mobile: req?.body?.mobile,
+        role: req?.body?.role,
       },
       {
         new: true
@@ -267,7 +267,7 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
   try {
     const token = await user.createPasswordResetToken();
     await user.save();
-    const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:5000/api/user/reset-password/${token}'>Click Here</>`;
+    const resetURL = `Hi, Please follow this link to reset Your Password. This link is valid till 10 minutes from now. <a href='http://localhost:3000/api/user/reset-password/${token}'>Click Here</>`;
     const data = {
       to: email,
       text: "Hey User",
@@ -284,6 +284,8 @@ const forgotPasswordToken = asyncHandler(async (req, res) => {
 const resetPassword = asyncHandler(async (req, res) => {
   const { password } = req.body;
   const { token } = req.params;
+  console.log(password);
+  console.log(token);
   const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
   const user = await User.findOne({
